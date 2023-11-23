@@ -1,5 +1,6 @@
 <script>
 	import text from './home.json';
+	import { navigate } from 'svelte-routing';
 </script>
 
 <div class="home-page">
@@ -15,7 +16,12 @@
 		</h1>
 		<h2>{text.header}</h2>
 		<p>{text.description}</p>
-		<button class="start-quiz">{text.button}</button>
+		<button
+			class="start-quiz"
+			on:click={() => {
+				navigate('/helloWorld');
+			}}>{text.button}</button
+		>
 	</div>
 </div>
 

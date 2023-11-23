@@ -1,6 +1,6 @@
 <script>
 	import text from './home.json';
-	import { navigate } from 'svelte-routing';
+	import { goto } from '$app/navigation';
 </script>
 
 <div class="home-page">
@@ -16,26 +16,13 @@
 		</h1>
 		<h2>{text.header}</h2>
 		<p>{text.description}</p>
-		<button
-			class="start-quiz"
-			on:click={() => {
-				navigate('/helloWorld');
-			}}>{text.button}</button
+		<button class="start-quiz" on:click={() => goto('/quiz', { replaceState: false })}
+			>{text.button}</button
 		>
 	</div>
 </div>
 
 <style>
-	:root {
-		--pewter: #a1a9b0;
-		--gonmetalGray: #6c6a61;
-		--ivory: #fbf9fb;
-		--black: #33363a;
-
-		background: var(--gonmetalGray);
-		color: var(--ivory);
-	}
-
 	.home-page {
 		height: 90vh;
 		display: flex;

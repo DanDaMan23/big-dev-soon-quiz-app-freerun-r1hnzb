@@ -1,10 +1,9 @@
 <script>
 	import { onMount } from 'svelte';
-	import FaCheck from 'svelte-icons/fa/FaCheck.svelte';
-	import FaSkullCrossbones from 'svelte-icons/fa/FaSkullCrossbones.svelte';
 	import { questions, currentQuestionIndex, answers, answeredQuestions } from '../../store';
 
 	import text from './quiz.json';
+	import AnswerButton from './AnswerButton.svelte';
 
 	const API_ENDPOINT = 'https://opentdb.com/api.php?amount=10';
 
@@ -47,23 +46,14 @@
 		<h4>{@html $questions && $questions[$currentQuestionIndex]?.question}</h4>
 		<div class="answers">
 			{#each $answers as answer}
-				<button
-					class="answer"
-					on:click={() => {
-						answerTheQuestionHandler(answer);
-					}}
-				>
-					<p>{@html answer}</p>
-					{#if isAnswered && answer === $questions[$currentQuestionIndex].correct_answer}
-						<div class="result-icon correct">
-							<FaCheck />
-						</div>
-					{:else if isAnswered && answerPicked === answer && answer !== $questions[$currentQuestionIndex].correct_answer}
-						<div class="result-icon wrong">
-							<FaSkullCrossbones />
-						</div>
-					{/if}
-				</button>
+				<AnswerButton
+					answerTheQuestionHandler={() => answerTheQuestionHandler(answer)}
+					{answer}
+					isCorrect={isAnswered && answer === $questions[$currentQuestionIndex].correct_answer}
+					isWrong={isAnswered &&
+						answerPicked === answer &&
+						answer !== $questions[$currentQuestionIndex].correct_answer}
+				/>
 			{/each}
 		</div>
 		{#if isAnswered && $currentQuestionIndex !== 9}
@@ -109,24 +99,6 @@
 		gap: 1rem;
 	}
 
-	.answer {
-		padding: 0.5rem;
-		border-radius: 20px;
-		font-weight: bolder;
-		background: var(--ivory);
-		color: var(--black);
-
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-
-		cursor: pointer;
-	}
-
-	.answer:hover {
-		background: var(--pewter);
-	}
-
 	.next-question-container {
 		display: flex;
 		justify-content: center;
@@ -141,20 +113,5 @@
 		color: var(--black);
 
 		cursor: pointer;
-	}
-
-	.result-icon {
-		width: 1rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.correct {
-		color: green;
-	}
-
-	.wrong {
-		color: red;
 	}
 </style>

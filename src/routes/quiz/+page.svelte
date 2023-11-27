@@ -4,6 +4,8 @@
 	import FaSkullCrossbones from 'svelte-icons/fa/FaSkullCrossbones.svelte';
 	import { questions, currentQuestionIndex, answers, answeredQuestions } from '../../store';
 
+	import text from './quiz.json';
+
 	const API_ENDPOINT = 'https://opentdb.com/api.php?amount=10';
 
 	let isAnswered = false;
@@ -41,7 +43,7 @@
 
 <div class="quiz">
 	<div class="container">
-		<p>Question {$currentQuestionIndex + 1} / {$questions && $questions.length}</p>
+		<p>{text.question} {$currentQuestionIndex + 1} / {$questions && $questions.length}</p>
 		<h4>{@html $questions && $questions[$currentQuestionIndex]?.question}</h4>
 		<div class="answers">
 			{#each $answers as answer}
@@ -71,7 +73,7 @@
 					on:click={() => {
 						currentQuestionIndex.nextQuestion();
 						isAnswered = false;
-					}}>Next Question</button
+					}}>{text.next}</button
 				>
 			</div>
 		{:else if $currentQuestionIndex === 9}
@@ -80,7 +82,7 @@
 					class="next-question"
 					on:click={() => {
 						// Go to results page
-					}}>Last Question</button
+					}}>{text.resultsPage}</button
 				>
 			</div>
 		{/if}

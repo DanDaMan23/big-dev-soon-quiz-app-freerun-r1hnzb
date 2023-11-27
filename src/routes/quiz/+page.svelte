@@ -13,6 +13,8 @@
 		fetch(API_ENDPOINT)
 			.then((response) => response.json())
 			.then((data) => {
+				currentQuestionIndex.reset();
+				answeredQuestions.clear();
 				questions.set(data?.results);
 			})
 			.catch((error) => {

@@ -21,7 +21,7 @@ export const correctAnswers = derived(answeredQuestions, ($answeredQuestions) =>
 	return {
 		totalOfCorrects: correctAnsweredQuestions?.length,
 		totalOfQuestions: $answeredQuestions?.length,
-		percentage: (correctAnsweredQuestions?.length / $answeredQuestions?.length) * 100,
+		percentage: ((correctAnsweredQuestions?.length / $answeredQuestions?.length) * 100) | 0,
 		ratio: `${correctAnsweredQuestions.length} / ${$answeredQuestions.length}`
 	};
 });

@@ -1,22 +1,40 @@
 <script>
 	import { correctAnswers } from '../../store';
-
-	console.log($correctAnswers.percentage);
 </script>
 
 <div class="results">
-	<div
-		class="results-pie-bar progress-bar"
-		style={`background: radial-gradient(closest-side, var(--gonmetalGray) 79%, transparent 80% 100%), conic-gradient(var(--black) ${$correctAnswers.percentage}%, var(--ivory) 0)`}
-	>
-		<p>{$correctAnswers.ratio}</p>
+	<div class="container">
+		<div
+			class="progress-pie-bar"
+			style={`background: radial-gradient(closest-side, var(--gonmetalGray) 79%, transparent 80% 100%), conic-gradient(var(--black) ${$correctAnswers.percentage}%, var(--ivory) 0)`}
+		>
+			<p>{$correctAnswers.ratio}</p>
+		</div>
+		<div class="details">
+			<p>You answered</p>
+			<p>{$correctAnswers.ratio} questions</p>
+		</div>
 	</div>
-	<p>You answered</p>
-	<p>{$correctAnswers.ratio} questions</p>
 </div>
 
 <style>
-	.progress-bar {
+	.results {
+		height: 90vh;
+		margin: 0 5rem;
+	}
+
+	.container {
+		display: flex;
+		justify-content: left;
+		align-items: center;
+		gap: 1rem;
+
+		background: var(--pewter);
+		padding: 1rem;
+		border-radius: 10px;
+	}
+
+	.progress-pie-bar {
 		width: 100px;
 		height: 100px;
 		border-radius: 50%;

@@ -1,13 +1,23 @@
 <script>
 	import { onMount } from 'svelte';
-	import { questions, currentQuestionIndex, answers } from '../../store';
+	import { questions, currentQuestionIndex, answers, answeredQuestions } from '../../store';
+
+	import text from './quiz.json';
+	import AnswerButton from './AnswerButton.svelte';
+	import NextQuestionButton from './NextQuestionButton.svelte';
 
 	const API_ENDPOINT = 'https://opentdb.com/api.php?amount=10';
+
+	// Consider using context or putting it in store instead of passing it through props
+	let isAnswered = false;
+	let answerPicked = '';
 
 	onMount(async () => {
 		fetch(API_ENDPOINT)
 			.then((response) => response.json())
 			.then((data) => {
+				currentQuestionIndex.reset();
+				answeredQuestions.clear();
 				questions.set(data?.results);
 			})
 			.catch((error) => {
@@ -15,25 +25,47 @@
 				return [];
 			});
 	});
+
+	const answerTheQuestionHandler = (answer) => {
+		answerPicked = answer;
+		if (!isAnswered) {
+			answeredQuestions.recordAnswer(
+				$questions[$currentQuestionIndex].question,
+				$questions[$currentQuestionIndex].correct_answer,
+				answer
+			);
+
+			console.log($answeredQuestions);
+		}
+
+		isAnswered = true;
+	};
 </script>
 
 <div class="quiz">
 	<div class="container">
-		<p>Question {$currentQuestionIndex + 1} / {$questions && $questions.length}</p>
+		<p>{text.question} {$currentQuestionIndex + 1} / {$questions && $questions.length}</p>
 		<h4>{@html $questions && $questions[$currentQuestionIndex]?.question}</h4>
 		<div class="answers">
 			{#each $answers as answer}
-				<button class="answer">{answer}</button>
+				<AnswerButton
+					answerTheQuestionHandler={() => answerTheQuestionHandler(answer)}
+					{answer}
+					isCorrect={isAnswered && answer === $questions[$currentQuestionIndex].correct_answer}
+					isWrong={isAnswered &&
+						answerPicked === answer &&
+						answer !== $questions[$currentQuestionIndex].correct_answer}
+				/>
 			{/each}
 		</div>
+		<NextQuestionButton
+			{isAnswered}
+			goToNextQuestionHandler={() => {
+				currentQuestionIndex.nextQuestion();
+				isAnswered = false;
+			}}
+		/>
 	</div>
-
-	<!-- Sample  -->
-	<!-- <ul>
-		{#each $questions as { question } (question)}
-			<li>{@html question}</li>
-		{/each}
-	</ul> -->
 </div>
 
 <style>
@@ -54,20 +86,5 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-	}
-
-	.answer {
-		text-align: left;
-		padding: 0.5rem;
-		border-radius: 20px;
-		font-weight: bolder;
-		background: var(--ivory);
-		color: var(--black);
-
-		cursor: pointer;
-	}
-
-	.answer:hover {
-		background: var(--pewter);
 	}
 </style>

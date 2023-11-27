@@ -2,7 +2,17 @@ import { derived, writable } from 'svelte/store';
 
 export const questions = writable([]);
 
-export const correctAnswers = writable(0);
+export const answeredQuestions = (() => {
+	const { subscribe, update, set } = writable([]);
+
+	return {
+		subscribe,
+		recordAnswer: (question, correctAnswer, answerPicked) => {
+			update((prevState) => [...prevState, { question, correctAnswer, answerPicked }]);
+		},
+		clear: () => set([])
+	};
+})();
 
 export const currentQuestionIndex = (() => {
 	const { subscribe, set, update } = writable(0);

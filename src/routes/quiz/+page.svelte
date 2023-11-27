@@ -1,8 +1,13 @@
 <script>
 	import { onMount } from 'svelte';
-	import { questions, currentQuestionIndex, answers } from '../../store';
+	import FaCheck from 'svelte-icons/fa/FaCheck.svelte';
+	import FaSkullCrossbones from 'svelte-icons/fa/FaSkullCrossbones.svelte';
+	import { questions, currentQuestionIndex, answers, answeredQuestions } from '../../store';
 
 	const API_ENDPOINT = 'https://opentdb.com/api.php?amount=10';
+
+	let isAnswered = false;
+	let answerPicked = '';
 
 	onMount(async () => {
 		fetch(API_ENDPOINT)
@@ -15,6 +20,21 @@
 				return [];
 			});
 	});
+
+	const answerTheQuestionHandler = (answer) => {
+		answerPicked = answer;
+		if (!isAnswered) {
+			answeredQuestions.recordAnswer(
+				$questions[$currentQuestionIndex].question,
+				$questions[$currentQuestionIndex].correct_answer,
+				answer
+			);
+
+			console.log($answeredQuestions);
+		}
+
+		isAnswered = true;
+	};
 </script>
 
 <div class="quiz">
@@ -23,17 +43,37 @@
 		<h4>{@html $questions && $questions[$currentQuestionIndex]?.question}</h4>
 		<div class="answers">
 			{#each $answers as answer}
-				<button class="answer">{answer}</button>
+				<button
+					class="answer"
+					on:click={() => {
+						answerTheQuestionHandler(answer);
+					}}
+				>
+					<p>{@html answer}</p>
+					{#if isAnswered && answer === $questions[$currentQuestionIndex].correct_answer}
+						<div class="result-icon correct">
+							<FaCheck />
+						</div>
+					{:else if isAnswered && answerPicked === answer && answer !== $questions[$currentQuestionIndex].correct_answer}
+						<div class="result-icon wrong">
+							<FaSkullCrossbones />
+						</div>
+					{/if}
+				</button>
 			{/each}
 		</div>
+		{#if isAnswered}
+			<div class="next-question-container">
+				<button
+					class="next-question"
+					on:click={() => {
+						currentQuestionIndex.nextQuestion();
+						isAnswered = false;
+					}}>Next Question</button
+				>
+			</div>
+		{/if}
 	</div>
-
-	<!-- Sample  -->
-	<!-- <ul>
-		{#each $questions as { question } (question)}
-			<li>{@html question}</li>
-		{/each}
-	</ul> -->
 </div>
 
 <style>
@@ -57,9 +97,32 @@
 	}
 
 	.answer {
-		text-align: left;
 		padding: 0.5rem;
 		border-radius: 20px;
+		font-weight: bolder;
+		background: var(--ivory);
+		color: var(--black);
+
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		cursor: pointer;
+	}
+
+	.answer:hover {
+		background: var(--pewter);
+	}
+
+	.next-question-container {
+		display: flex;
+		justify-content: center;
+		margin: 1rem;
+	}
+
+	.next-question {
+		padding: 0.5rem;
+		border-radius: 30px;
 		font-weight: bolder;
 		background: var(--ivory);
 		color: var(--black);
@@ -67,7 +130,18 @@
 		cursor: pointer;
 	}
 
-	.answer:hover {
-		background: var(--pewter);
+	.result-icon {
+		width: 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.correct {
+		color: green;
+	}
+
+	.wrong {
+		color: red;
 	}
 </style>

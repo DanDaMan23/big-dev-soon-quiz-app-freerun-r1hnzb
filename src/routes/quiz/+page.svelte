@@ -62,7 +62,7 @@
 				</button>
 			{/each}
 		</div>
-		{#if isAnswered}
+		{#if isAnswered && $currentQuestionIndex !== 9}
 			<div class="next-question-container">
 				<button
 					class="next-question"
@@ -70,6 +70,15 @@
 						currentQuestionIndex.nextQuestion();
 						isAnswered = false;
 					}}>Next Question</button
+				>
+			</div>
+		{:else if $currentQuestionIndex === 9}
+			<div class="next-question-container">
+				<button
+					class="next-question"
+					on:click={() => {
+						// Go to results page
+					}}>Last Question</button
 				>
 			</div>
 		{/if}

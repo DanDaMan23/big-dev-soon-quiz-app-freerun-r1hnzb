@@ -4,9 +4,11 @@
 
 	import text from './quiz.json';
 	import AnswerButton from './AnswerButton.svelte';
+	import NextQuestionButton from './NextQuestionButton.svelte';
 
 	const API_ENDPOINT = 'https://opentdb.com/api.php?amount=10';
 
+	// Consider using context or putting it in store instead of passing it through props
 	let isAnswered = false;
 	let answerPicked = '';
 
@@ -56,26 +58,13 @@
 				/>
 			{/each}
 		</div>
-		{#if isAnswered && $currentQuestionIndex !== 9}
-			<div class="next-question-container">
-				<button
-					class="next-question"
-					on:click={() => {
-						currentQuestionIndex.nextQuestion();
-						isAnswered = false;
-					}}>{text.next}</button
-				>
-			</div>
-		{:else if $currentQuestionIndex === 9}
-			<div class="next-question-container">
-				<button
-					class="next-question"
-					on:click={() => {
-						// Go to results page
-					}}>{text.resultsPage}</button
-				>
-			</div>
-		{/if}
+		<NextQuestionButton
+			{isAnswered}
+			goToNextQuestionHandler={() => {
+				currentQuestionIndex.nextQuestion();
+				isAnswered = false;
+			}}
+		/>
 	</div>
 </div>
 
@@ -97,21 +86,5 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-	}
-
-	.next-question-container {
-		display: flex;
-		justify-content: center;
-		margin: 1rem;
-	}
-
-	.next-question {
-		padding: 0.5rem;
-		border-radius: 30px;
-		font-weight: bolder;
-		background: var(--ivory);
-		color: var(--black);
-
-		cursor: pointer;
 	}
 </style>

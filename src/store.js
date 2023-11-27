@@ -14,6 +14,18 @@ export const answeredQuestions = (() => {
 	};
 })();
 
+export const correctAnswers = derived(answeredQuestions, ($answeredQuestions) => {
+	const correctAnsweredQuestions = $answeredQuestions.filter(
+		({ answerPicked, correctAnswer }) => answerPicked === correctAnswer
+	);
+	return {
+		totalOfCorrects: correctAnsweredQuestions?.length,
+		totalOfQuestions: $answeredQuestions?.length,
+		percentage: (correctAnsweredQuestions?.length / $answeredQuestions?.length) * 100,
+		ratio: `${correctAnsweredQuestions.length} / ${$answeredQuestions.length}`
+	};
+});
+
 export const currentQuestionIndex = (() => {
 	const { subscribe, set, update } = writable(0);
 

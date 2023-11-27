@@ -5,7 +5,6 @@
 	export let isWrong;
 
 	import FaCheck from 'svelte-icons/fa/FaCheck.svelte';
-	import { questions, currentQuestionIndex } from '../../store';
 	import FaSkullCrossbones from 'svelte-icons/fa/FaSkullCrossbones.svelte';
 </script>
 

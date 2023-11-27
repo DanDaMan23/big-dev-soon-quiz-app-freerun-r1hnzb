@@ -1,4 +1,5 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { currentQuestionIndex } from '../../store';
 	import text from './quiz.json';
 
@@ -12,11 +13,8 @@
 	</div>
 {:else if isAnswered && $currentQuestionIndex === 9}
 	<div class="next-question-container">
-		<button
-			class="next-question"
-			on:click={() => {
-				// Go to results page
-			}}>{text.resultsPage}</button
+		<button class="next-question" on:click={() => goto('/results', { replaceState: false })}
+			>{text.resultsPage}</button
 		>
 	</div>
 {/if}

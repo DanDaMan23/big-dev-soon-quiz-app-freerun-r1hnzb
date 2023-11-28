@@ -27,15 +27,13 @@
 	});
 
 	const answerTheQuestionHandler = (answer) => {
-		answerPicked = answer;
 		if (!isAnswered) {
+			answerPicked = answer;
 			answeredQuestions.recordAnswer(
 				$questions[$currentQuestionIndex].question,
 				$questions[$currentQuestionIndex].correct_answer,
 				answer
 			);
-
-			console.log($answeredQuestions);
 		}
 
 		isAnswered = true;

@@ -1,13 +1,16 @@
 <script>
 	import { goto } from '$app/navigation';
+	import text from './text.json';
 </script>
 
 <div class="layout">
 	<slot />
 	<div class="footer">
-		<button class="home" on:click={() => goto('/', { replaceState: false })}>Return to Home</button>
+		<button class="home" on:click={() => goto('/', { replaceState: false })}
+			>{text.navigationButtons.home}</button
+		>
 		<button class="new-quiz" on:click={() => goto('/quiz', { replaceState: false })}
-			>Start New Quiz</button
+			>{text.navigationButtons.newQuiz}</button
 		>
 	</div>
 </div>
@@ -32,11 +35,20 @@
 	.new-quiz {
 		padding: 0.5rem 4rem;
 		border-radius: 40px;
+		color: var(--ivory);
+		font-weight: bolder;
 
 		cursor: pointer;
 
 		@media (max-width: 900px) {
 			width: 100%;
 		}
+	}
+
+	.home {
+		background: var(--pewter);
+	}
+	.new-quiz {
+		background: var(--gonmetalGray);
 	}
 </style>

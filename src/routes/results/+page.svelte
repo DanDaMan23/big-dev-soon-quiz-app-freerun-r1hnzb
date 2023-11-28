@@ -21,7 +21,9 @@
 		<p>Your Answers</p>
 		{#each $answeredQuestions as { question, correctAnswer, answerPicked }, index (question)}
 			<div class="answer">
-				<p class="index">{index + 1}</p>
+				<div class="index-area">
+					<p class="index">{index + 1}</p>
+				</div>
 				<div class="answer-details">
 					<p>{@html question}</p>
 					<div class="evaluation">
@@ -118,5 +120,19 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+
+	.index-area {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.index {
+		color: var(--ivory);
+		background-color: var(--pewter);
+		font-weight: bolder;
+
+		padding: 0.5rem;
+		border-radius: 30px;
 	}
 </style>

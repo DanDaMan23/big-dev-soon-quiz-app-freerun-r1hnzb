@@ -50,10 +50,15 @@
 <style>
 	.results {
 		height: 90vh;
-
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+
+		padding: 0 0 85rem 0;
+
+		@media (min-width: 900px) {
+			padding: 0 0 72rem 0;
+		}
 
 		@media (min-width: 500px) {
 			margin: 0 5rem;
